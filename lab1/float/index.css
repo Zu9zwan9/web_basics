@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+
+    width: 100%;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    min-height: 80vh;
+}
+
+.sidebar {
+    background-color: cyan;
+    width: 25%; /* Sidebar takes up 25% of the width */
+    height: 80vh; /* Full height of the viewport */
+    float: left; /* Float sidebar to the left */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center IMG vertically and horizontally */
+}
+
+.header {
+    background-color: blue;
+    height: 15vh; /* Header height is 20% of the viewport height */
+    width: 75%; /* Header takes up the remaining width of the viewport */
+    float: left; /* Float header to the left next to the sidebar */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center TEXT vertically and horizontally */
+}
+
+.content {
+    background-color: yellow;
+    height: 65vh; /* Content takes the remaining height */
+    width: 75%; /* Content takes up the remaining width of the viewport */
+    float: left; /* Float content below the header */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center TEXT vertically and horizontally */
+}
+
+.footer {
+    background-color: lavender;
+    width: 100%; /* Footer spans the full width of the viewport */
+    height: 20vh; /* Footer height is 20% of the viewport height */
+    display: flex;
+    justify-content: space-between; /* Aligns children with space between them */
+}
+
+.footer-text {
+    background-color: lavender;
+    width: 75%; /* Footer-text takes up 75% of the footer */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center TEXT vertically and horizontally */
+}
+
+.footer-img {
+    background-color: pink;
+    width: 25%; /* Footer-img takes up the remaining 25% of the footer */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center IMG vertically and horizontally */
+}

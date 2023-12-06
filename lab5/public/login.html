@@ -1,0 +1,60 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+<h2>Login</h2>
+<form id="loginForm">
+    Username: <input type="text" name="username" required><br>
+    Password: <input type="password" name="password" required><br>
+    <input type="submit" value="Login">
+</form>
+
+<!-- Додана кнопка "Register" -->
+<button id="registerButton">Register</button>
+
+<script>
+    // Перевірка, чи користувач вже залогінений
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        // Якщо користувач вже залогінений, перенаправити його на сторінку користувача
+        window.location.href = 'user.html';
+    }
+
+    // Обробник для кнопки "Register"
+    document.getElementById('registerButton').addEventListener('click', () => {
+        // Перенаправити на сторінку реєстрації
+        window.location.href = 'register.html';
+    });
+
+    // Обробник для форми логіну
+    document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const username = e.target.username.value;
+        const password = e.target.password.value;
+
+        const result = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (result.ok) {
+            const userData = await result.json();
+            // Зберігання даних користувача локально та перехід на сторінку користувача
+            localStorage.setItem('user', JSON.stringify(userData));
+            window.location.href = 'user.html';
+        } else {
+            alert('Login failed');
+        }
+    };
+</script>
+</body>
+</html>

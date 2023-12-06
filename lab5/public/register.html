@@ -1,0 +1,59 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="register.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+<h2>Register</h2>
+<form id="registerForm" enctype="multipart/form-data">
+    Username: <input type="text" name="username" required><br>
+    Password: <input type="password" name="password" required><br>
+    Name: <input type="text" name="name" required><br>
+    Group: <input type="text" name="group" required><br>
+    Variant: <input type="number" name="variant" required><br>
+    Phone number: <input type="text" name="phone" required><br>
+    Photo: <input type="file" name="photo" required><br>
+    <input type="submit" value="Register">
+</form>
+
+<!-- Додана кнопка "Login" -->
+<button id="loginButton">Login</button>
+
+<script>
+    // Перевірка, чи користувач вже залогінений
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        // Якщо користувач вже залогінений, перенаправити його на сторінку користувача
+        window.location.href = 'user.html';
+    }
+
+    // Обробник для кнопки "Login"
+    document.getElementById('loginButton').addEventListener('click', () => {
+        // Перенаправити на сторінку логіну
+        window.location.href = 'login.html';
+    });
+
+    // Обробник для форми реєстрації (залишився без змін)
+    document.getElementById('registerForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        const response = await fetch('http://localhost:3000/register', {
+            method: 'POST',
+            body: formData // formData буде містити всі введені дані та фото
+        });
+
+        if (response.ok) {
+            alert('Registration successful');
+            window.location.href = 'login.html';
+        } else {
+            alert('Registration failed');
+        }
+    };
+</script>
+</body>
+</html>

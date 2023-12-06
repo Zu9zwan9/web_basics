@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webSocket Chat</title>
+    <meta content="width=device-width, initial scale=1.0" name="viewport">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="h-screen w-screen flex flex-col justify-between">
+    <div class="p-3 overflow-auto" id="chat">
+    </div>
+    <div class="flex">
+        <input class="px-3 w-1/3 border-t border-gray-300 outline-none text-gray-700" id="username" placeholder="Username"
+               type="text"/>
+        <input class="px-3 w-2/3 border-t border-gray-300 outline-none text-gray-700" id="message" placeholder="Type your message.."
+               type="text"/>
+        <button class="px-8 py-2 bg-blue-500 text-white hover:bg-green-600 transition-colors" onclick="sendMessage()">
+            Send
+        </button>
+    </div>
+</div>
+<script>
+    const ws = new WebSocket("ws://localhost:3000");
+    let username = "";
+
+    ws.addEventListener("message", function (event) {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "message") {
+            addMessage(data.username, data.message);
+        }
+    });
+
+    function sendMessage() {
+        const message = document.getElementById("message").value;
+        if (!message) return false;
+
+        if (!username) {
+            const inputUsername = document.getElementById("username").value;
+            if (!inputUsername) return false;
+            const takenUsernames = Array.from(document.querySelectorAll("#chat span:first-child")).map(span => span.textContent);
+            if (takenUsernames.includes(inputUsername)) {
+                alert("This username is already taken");
+                return false;
+            }
+            username = inputUsername;
+            document.getElementById("username").disabled = true;
+        }
+
+        ws.send(JSON.stringify({type: "message", username: username, message: message}));
+
+        addMessage(username, message);
+        document.getElementById("message").value = "";
+    }
+
+
+    function addMessage(username, message) {
+        const messageContainer = document.createElement("DIV");
+        const usernameElement = document.createElement("SPAN");
+        const messageElement = document.createElement("SPAN");
+
+        usernameElement.textContent = username;
+        messageElement.textContent = message;
+
+        usernameElement.classList.add("font-bold", "mr-2", "text-gray-900");
+        messageElement.classList.add("text-gray-700");
+
+        messageContainer.classList.add("text-sm", "py-1");
+        messageContainer.appendChild(usernameElement);
+        messageContainer.appendChild(messageElement);
+
+        document.getElementById("chat").appendChild(messageContainer);
+    }
+</script>
+</body>
+</html>

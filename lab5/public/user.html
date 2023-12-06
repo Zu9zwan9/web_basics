@@ -1,0 +1,42 @@
+<!-- user.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+</head>
+<body>
+<h2>Welcome, <span id="userName"></span>!</h2>
+<div>
+    <p>Group: <span id="userGroup"></span></p>
+    <p>Variant: <span id="userVariant"></span></p>
+    <p>Phone: <span id="userPhone"></span></p>
+    <img id="userPhoto" src="" alt="User photo" style="width: 100px; height: auto;">
+</div>
+
+<!-- Додана кнопка "Logout" -->
+<button id="logoutButton">Logout</button>
+
+<script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userGroup').textContent = user.group;
+        document.getElementById('userVariant').textContent = user.variant;
+        document.getElementById('userPhone').textContent = user.phone;
+        document.getElementById('userPhoto').src = `http://localhost:3000/${user.photo}`;
+    } else {
+        // Redirect to login page if no user data is found
+        window.location.href = 'login.html';
+    }
+
+    // Обробник для кнопки "Logout"
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        // Очистимо локальне сховище та перенаправимо на сторінку логіну
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    });
+</script>
+</body>
+</html>

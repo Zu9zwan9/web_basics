@@ -1,0 +1,67 @@
+<!-- adminEditUser.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User Data</title>
+</head>
+<body>
+<h2>Edit User Data</h2>
+<form id="editUserForm">
+    Username: <input type="text" id="username" required><br>
+    New Password: <input type="password" id="newPassword" required><br>
+    <!-- Add other fields for editing user data (e.g., name, group, variant, phone) here -->
+    <input type="submit" value="Save Changes">
+</form>
+
+<!-- Додана кнопка для видалення користувача -->
+<button id="deleteUserButton">Delete User</button>
+
+<script>
+    document.getElementById('editUserForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const newPassword = document.getElementById('newPassword').value;
+
+        // You can include other fields and data here
+
+        // Send an API request to update user data
+        const response = await fetch(`http://localhost:3000/admin/edituser/${username}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                newPassword, // Додаємо новий пароль у відправлені дані
+                // Include other data fields here
+            })
+        });
+
+        if (response.ok) {
+            alert('User data updated successfully');
+            // Redirect or take any other desired action
+        } else {
+            alert('User data update failed');
+        }
+    };
+
+    // Обробник для кнопки "Delete User"
+    document.getElementById('deleteUserButton').addEventListener('click', async () => {
+        const username = document.getElementById('username').value;
+
+        // Send an API request to delete the user
+        const response = await fetch(`http://localhost:3000/admin/deleteuser/${username}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert('User deleted successfully');
+            // Redirect or take any other desired action
+        } else {
+            alert('User deletion failed');
+        }
+    });
+</script>
+</body>
+</html>

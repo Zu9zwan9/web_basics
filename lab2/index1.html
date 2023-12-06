@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Форма для заповнення</title>
+  <style>
+    .error {
+      border: 2px solid red;
+    }
+    .form-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .form-field {
+      width: 45%;
+    }
+    .data-field {
+      width: 45%;
+      padding-left: 20px;
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      width: auto;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <div class="form-field">
+    <form id="dataForm">
+      <label for="fullName">ПІБ</label>
+      <input type="text" id="fullName" name="fullName" required>
+
+      <label for="faculty">Факультет</label>
+      <input type="text" id="faculty" name="faculty" required>
+
+      <label for="birthdate">Дата народж. (дд.мм.рррр)</label>
+      <input type="text" id="birthdate" name="birthdate" required placeholder="дд.мм.рррр">
+
+      <label for="address">Адреса (м. Текст)</label>
+      <input type="text" id="address" name="address" required placeholder="м. Текст">
+
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required>
+
+      <button type="submit">Підтвердити</button>
+    </form>
+  </div>
+  <div class="data-field">
+    <h2>Введені дані</h2>
+    <p id="outputFullName"></p>
+    <p id="outputFaculty"></p>
+    <p id="outputBirthdate"></p>
+    <p id="outputAddress"></p>
+    <p id="outputEmail"></p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('dataForm').onsubmit = function(event) {
+    event.preventDefault();
+
+    // Очищення попередніх помилок
+    var fields = ['fullName', 'faculty', 'birthdate', 'address', 'email'];
+    fields.forEach(function(field) {
+      document.getElementById(field).classList.remove('error');
+    });
+
+    // Регулярні вирази для валідації
+    var regex = {
+      fullName: /^[А-Яа-яІіЇїЄєҐґ' ]+$/,
+      faculty: /^[А-Яа-яІіЇїЄєҐґ' ]+$/,
+      birthdate: /^(\d{2})\.(\d{2})\.(\d{4})$/,
+      address: /.+/,
+      email: /^[^@]+@[^@]+\.[^@]+$/
+    };
+
+    var isValid = true;
+    var data = {};
+
+    // Перевірка полів
+    fields.forEach(function(field) {
+      var value = document.getElementById(field).value;
+      if (field === 'address' && !value.startsWith('м. ')) {
+        value = 'м. ' + value;
+      }
+
+      var outputElement = 'output' + field.charAt(0).toUpperCase() + field.slice(1);
+
+      if (!regex[field].test(value)) {
+        document.getElementById(field).classList.add('error');
+        isValid = false;
+      } else {
+        data[field] = value;
+        document.getElementById(outputElement).textContent = value;
+      }
+    });
+
+    if (isValid) {
+      // Вивід даних
+      console.log('Введені дані:', data);
+      alert('Дані успішно введені!');
+    } else {
+      alert('Будь ласка, введіть коректні дані.');
+    }
+  };
+</script>
+</body>
+</html>

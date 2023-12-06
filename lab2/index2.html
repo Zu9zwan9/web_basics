@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Інтерактивна таблиця</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid #000;
+      cursor: pointer;
+    }
+    .variant {
+      background-color: lightgray; /* Початковий колір для клітинки варіанту */
+    }
+  </style>
+</head>
+<body>
+
+<table id="interactiveTable">
+  <!-- Таблиця буде згенерована тут -->
+</table>
+
+<input type="color" id="colorPicker" style="visibility:hidden;">
+
+<script>
+  function getRandomColor() {
+    return '#' + Math.floor(Math.random()*16777215).toString(16);
+  }
+
+  function setColor(cell) {
+    const colorPicker = document.getElementById('colorPicker');
+    colorPicker.onchange = () => cell.style.backgroundColor = colorPicker.value;
+    colorPicker.click();
+  }
+
+  function setRowColors(startCell) {
+    const row = startCell.parentElement;
+    for (let i = startCell.cellIndex; i < row.cells.length; i += 2) {
+      row.cells[i].style.backgroundColor = getRandomColor();
+    }
+  }
+
+  // Генерація таблиці 6x6
+  const variant = 5; // Номер варіанту
+  const table = document.getElementById('interactiveTable');
+
+  for (let i = 0; i < 6; i++) {
+    const row = table.insertRow();
+    for (let j = 0; j < 6; j++) {
+      const cell = row.insertCell();
+      cell.textContent = i * 6 + j + 1;
+
+      // Позначення клітинки варіанту
+      if (cell.textContent == variant.toString()) {
+        cell.classList.add('variant');
+      }
+
+      // Події для клітинки
+      cell.onmouseover = () => {
+        if (cell.classList.contains('variant')) {
+          cell.style.backgroundColor = getRandomColor();
+        }
+      };
+      cell.onclick = () => setColor(cell);
+      cell.ondblclick = () => setRowColors(cell);
+    }
+  }
+</script>
+
+</body>
+</html>
